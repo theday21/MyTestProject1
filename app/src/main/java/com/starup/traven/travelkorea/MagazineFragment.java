@@ -26,7 +26,7 @@ public class MagazineFragment extends Fragment {
                 .inflate(R.layout.magazine_fragment, container, false);
 
         // Set the title view to show the page number.
-        ((TextView) rootView.findViewById(android.R.id.text1)).setText("my first test");
+        ((TextView) rootView.findViewById(android.R.id.text1)).setText("my first test 22");
 
         return rootView;
     }
