@@ -4,24 +4,55 @@
     android:layout_height="match_parent">
 
     <!-- Dummy content. -->
-    <LinearLayout android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <RelativeLayout  android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="16dp">
-
-        <TextView android:id="@android:id/text1"
-            style="?android:textAppearanceLarge"
-            android:textStyle="bold"
-            android:layout_width="match_parent"
+        <LinearLayout android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp" />
+            android:orientation="vertical">
+            <TextView android:id="@android:id/text1"
+                style="?android:textAppearanceLarge"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp" />
 
-        <TextView style="?android:textAppearanceMedium"
-            android:lineSpacingMultiplier="1.2"
-            android:layout_width="match_parent"
+            <TextView android:id="@android:id/text1"
+                style="?android:textAppearanceLarge"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp" />
+
+            <TextView style="?android:textAppearanceMedium"
+                android:lineSpacingMultiplier="1.2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="test2" />
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="test2" />
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true">
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_local_dining_black_24dp" />
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_hotel_black_24dp" />
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_shopping_basket_black_24dp" />
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_local_activity_black_24dp" />
 
-    </LinearLayout>
-
+        </LinearLayout>
+    </RelativeLayout >
 </ScrollView>

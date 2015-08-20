@@ -1,8 +1,9 @@
 package com.starup.traven.travelkorea;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+//import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.view.PagerAdapter;
@@ -12,7 +13,7 @@ import android.support.v4.app.FragmentManager;
 
 
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends ActionBarActivity {
 
     private static final int NUM_ITEMS = 3;
 
