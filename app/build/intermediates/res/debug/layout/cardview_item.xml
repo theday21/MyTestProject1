@@ -1,0 +1,92 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent">
+    <!-- A CardView that contains a TextView -->
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal"
+        android:gravity="right"
+        >
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="200dp"
+            android:orientation="vertical"
+            android:background="@drawable/schedule_item_bg"
+            />
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view"
+            android:layout_width="250dp"
+            android:layout_height="200dp"
+            card_view:cardCornerRadius="10dp"
+            android:background="@drawable/schedule_item_bg"
+            android:layout_margin="5dp">
+
+            <android.support.design.widget.CoordinatorLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:orientation="vertical"
+                    android:background="@color/light_orange"
+                    android:id="@+id/schedule_item">
+
+                    <ImageView
+                        android:id="@+id/schedule_img"
+                        android:layout_width="fill_parent"
+                        android:layout_height="150dp"
+                        android:src="@drawable/schedule_img1"
+                        android:layout_weight="1"
+                        android:scaleType="centerCrop"/>
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="경복궁 가을 야간 특별 개방"
+                        android:textSize="13sp"
+                        android:textColor="@color/dark_gray"
+                        android:paddingLeft="5dp"/>
+                    <TextView
+                        android:id="@+id/address"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="서울특별시 종로구 사직로 161 (세종로)"
+                        android:textSize="11sp"
+                        android:textColor="@color/schedule_text"
+                        android:paddingLeft="5dp"/>
+                    <TextView
+                        android:id="@+id/schedule_phone"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text=""
+                        android:textSize="12sp"
+                        android:textColor="@color/schedule_text"
+                        android:paddingLeft="5dp"/>
+                </LinearLayout>
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/schedule_cancel_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:clickable="true"
+                    android:src="@drawable/ic_cancel"
+                    app:layout_anchor="@id/schedule_item"
+                    app:layout_anchorGravity="bottom|right|end"
+                    android:elevation="10dp"/>
+            </android.support.design.widget.CoordinatorLayout>
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+
+
+</LinearLayout>
+<!-- From: file:/E:/2.%20Project/GitHub/MyTestProject1/app/src/main/res/layout/cardview_item.xml -->

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:id="@+id/root_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+    <FrameLayout android:id="@+id/google_map_fragment"
+    android:layout_weight="1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+        android:padding="2dp"
+        android:background="@color/shadow_text">
+        <fragment
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="com.google.android.gms.maps.SupportMapFragment"/>
+        </FrameLayout>
+    <FrameLayout android:id="@+id/information_list_fragment"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</LinearLayout><!-- From: file:/E:/2.%20Project/GitHub/MyTestProject1/app/src/main/res/layout/fragment_map_layout.xml -->

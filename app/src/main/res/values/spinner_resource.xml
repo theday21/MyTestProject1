@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="language_list">
+        <item name="usa">United States</item>
+        <item name="korea">한국</item>
+        <item name="china">中国</item>
+        <item name="japan">日本</item>
+    </string-array>
+
+    <string-array name="gender_list">
+        <item name="male">남자</item>
+        <item name="female">여자</item>
+    </string-array>
+</resources>

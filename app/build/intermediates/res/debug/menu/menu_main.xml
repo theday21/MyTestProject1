@@ -1,7 +1,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
+
+    <item
+        android:id="@+id/go_map"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:title="지도 가기"/>
+    <item
+        android:id="@+id/go_schedule"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:title="내 스케쥴 보기"/>
+    <item
+        android:id="@+id/my_account"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:title="설정"/>
+<!--    <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="never" />
+-->
 </menu>
 <!-- From: file:/E:/2.%20Project/GitHub/MyTestProject1/app/src/main/res/menu/menu_main.xml -->

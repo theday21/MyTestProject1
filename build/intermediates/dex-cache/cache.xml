@@ -2,18 +2,18 @@
 <items version="2" >
 
     <item
-        jar="E:\2. Project\GitHub\MyTestProject1\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.1\jars\libs\internal_impl-22.2.1.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="c471eaaba13ff64f6e0383d1c30a9cdc9a97efeb">
-        <dex dex="E:\2. Project\GitHub\MyTestProject1\app\build\intermediates\pre-dexed\debug\internal_impl-22.2.1-e3a7bf33013db1ef0a6b758ec713304811d6817e.jar" />
-    </item>
-    <item
         jar="E:\2. Project\GitHub\MyTestProject1\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.1\jars\classes.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="f8efd0096475e0daf054267b61544e10dc776503">
         <dex dex="E:\2. Project\GitHub\MyTestProject1\app\build\intermediates\pre-dexed\debug\classes-7a465abacef4c64c6831f52113027819095b0f64.jar" />
+    </item>
+    <item
+        jar="E:\2. Project\GitHub\MyTestProject1\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-location\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="4a135d56554069e5d0ff80e3220e887e57146ee5">
+        <dex dex="E:\2. Project\GitHub\MyTestProject1\app\build\intermediates\pre-dexed\debug\classes-44d388c837a0de1e54852ab1ea318087205e72dc.jar" />
     </item>
     <item
         jar="E:\2. Project\GitHub\MyTestProject1\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.2.1\jars\classes.jar"
@@ -28,6 +28,48 @@
         revision="22.0.1"
         sha1="61a0ff5c29295ec56d7e0bd3d25d95dbf71b4b2b">
         <dex dex="E:\2. Project\GitHub\MyTestProject1\app\build\intermediates\pre-dexed\debug\support-annotations-22.2.1-4b349027f9e3087cb3c6d50e3fab0ec7facd5787.jar" />
+    </item>
+    <item
+        jar="E:\2. Project\GitHub\MyTestProject1\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-maps\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="cb6fab7a71fa9ec1f483d44c5fca65ab469d8aca">
+        <dex dex="E:\2. Project\GitHub\MyTestProject1\app\build\intermediates\pre-dexed\debug\classes-1e59aa79ed5a2fde41e1d9fd193f727be8760776.jar" />
+    </item>
+    <item
+        jar="E:\2. Project\GitHub\MyTestProject1\app\build\intermediates\exploded-aar\com.android.support\design\22.2.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="fc63b820d54c8a27a3a614bdd93920e0076581c2">
+        <dex dex="E:\2. Project\GitHub\MyTestProject1\app\build\intermediates\pre-dexed\debug\classes-85562021acc1fe5b3d5b44be19d7818917600649.jar" />
+    </item>
+    <item
+        jar="E:\2. Project\GitHub\MyTestProject1\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\22.2.1\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="3abb4b88f5a8a0584a9b01d3170d7165f12f8588">
+        <dex dex="E:\2. Project\GitHub\MyTestProject1\app\build\intermediates\pre-dexed\debug\classes-d5fca2da2837f12f5b453ff9d6acb1c8e2642445.jar" />
+    </item>
+    <item
+        jar="E:\2. Project\GitHub\MyTestProject1\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.1\jars\libs\internal_impl-22.2.1.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="c471eaaba13ff64f6e0383d1c30a9cdc9a97efeb">
+        <dex dex="E:\2. Project\GitHub\MyTestProject1\app\build\intermediates\pre-dexed\debug\internal_impl-22.2.1-e3a7bf33013db1ef0a6b758ec713304811d6817e.jar" />
+    </item>
+    <item
+        jar="E:\2. Project\GitHub\MyTestProject1\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="c0c912d58c9468b1f9d9769c8975afdf2c85d681">
+        <dex dex="E:\2. Project\GitHub\MyTestProject1\app\build\intermediates\pre-dexed\debug\classes-9f4d40a386d41562cc823a88a217a296ba35d591.jar" />
+    </item>
+    <item
+        jar="E:\2. Project\GitHub\MyTestProject1\app\build\intermediates\exploded-aar\com.android.support\cardview-v7\22.1.1\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="22886d910315028a2b34b1ba068c265534ade87a">
+        <dex dex="E:\2. Project\GitHub\MyTestProject1\app\build\intermediates\pre-dexed\debug\classes-2a53902260c722bde2f8cc788f9708f020486e9c.jar" />
     </item>
 
 </items>

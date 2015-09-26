@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black">
+
+    <TextView
+        android:id="@+id/id_nation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gray"
+        android:text="언  어"
+        android:textSize="20sp"
+        android:layout_margin="20dp"/>
+
+    <Spinner
+        android:id="@+id/language_spinner"
+        android:layout_margin="23dp"
+        android:layout_toRightOf="@id/id_nation"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        />
+
+    <TextView
+        android:id="@+id/id_gender"
+        android:layout_below="@id/id_nation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gray"
+        android:text="성  별"
+        android:textSize="20sp"
+        android:layout_margin="20dp"/>
+
+    <Spinner
+        android:id="@+id/gender_spinner"
+        android:layout_margin="23dp"
+        android:layout_toRightOf="@+id/id_gender"
+        android:layout_below="@id/language_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        />
+
+    <TextView
+        android:id="@+id/id_age"
+        android:layout_below="@id/id_gender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gray"
+        android:text="나  이"
+        android:textSize="20sp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="80dp"/>
+    <NumberPicker
+        android:id="@+id/age_picker"
+        android:layout_marginLeft="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_toRightOf="@+id/id_age"
+        android:layout_below="@id/gender_spinner"/>
+
+    <TextView
+        android:id="@+id/id_customize"
+        android:layout_below="@id/id_age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gray"
+        android:text="추천정보를 보시겠습니까"
+        android:textSize="20sp"
+        android:layout_marginTop="100dp"
+        android:layout_marginLeft="20dp"/>
+
+    <RadioGroup
+        android:layout_below="@id/age_picker"
+        android:layout_toRightOf="@id/id_customize"
+        android:layout_marginLeft="20dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <RadioButton android:id="@+id/radio_pirates"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ON"
+            android:onClick="onRadioButtonClicked"/>
+        <RadioButton android:id="@+id/radio_ninjas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="OFF"
+            android:onClick="onRadioButtonClicked"/>
+    </RadioGroup>
+
+</RelativeLayout>
