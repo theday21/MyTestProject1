@@ -17,10 +17,10 @@
         android:id="@+id/view_A">
                 <ImageView android:id="@+id/detail_image1"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="200dp"
                     android:layout_weight="1"
-                    android:src="@drawable/img1"
-                    android:elevation="5dp"/>
+                    android:elevation="5dp"
+                    android:layout_centerHorizontal="true"/>
 
 <!--            <ImageView android:id="@+id/detail_image3"
                 android:layout_width="wrap_content"
@@ -36,8 +36,7 @@
         android:padding="5dp">
 
         <TextView
-            android:id="@+id/title"
-            android:text="고궁"
+            android:id="@+id/detail_title"
             android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -48,36 +47,34 @@
 
         <ImageView
             android:id="@+id/thumb_up"
-            android:layout_below="@id/title"
+            android:layout_below="@id/detail_title"
             android:layout_alignParentLeft="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_thumb_up_black_24dp"/>
         <TextView
             android:id="@+id/thumb_up_num"
-            android:layout_below="@id/title"
+            android:layout_below="@id/detail_title"
             android:layout_toRightOf="@+id/thumb_up"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:paddingLeft="5dp"
-            android:text="3개"/>
+            android:paddingLeft="5dp"/>
         <ImageView
             android:id="@+id/thumb_down"
-            android:layout_below="@id/title"
+            android:layout_below="@id/detail_title"
             android:layout_toRightOf="@+id/thumb_up_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_thumb_down_black_24dp"/>
         <TextView
             android:id="@+id/thumb_down_num"
-            android:layout_below="@id/title"
+            android:layout_below="@id/detail_title"
             android:layout_toRightOf="@+id/thumb_down"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:paddingLeft="5dp"
-            android:text="1개"/>
+            android:paddingLeft="5dp"/>
 
     </RelativeLayout>
 
@@ -91,7 +88,6 @@
         >
         <TextView
             android:id="@+id/detail_overview"
-            android:text="test2"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/dark_gray"

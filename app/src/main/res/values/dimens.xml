@@ -3,7 +3,9 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <dimen name="image_thumbnail_size">500dp</dimen>
+    <dimen name="image_thumbnail_size">150dp</dimen>
     <dimen name="image_max_size">600dp</dimen>
     <dimen name="image_thumbnail_spacing">1dp</dimen>
+
+    <dimen name="image_thumbnail_size2">200dp</dimen>
 </resources>

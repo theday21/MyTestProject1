@@ -126,12 +126,17 @@ public class VisitKoreaXmlParser {
         public final String addr1;
         public final String firstimage;
         public final String overview;
+        public String phone = null;
         public double mapx = 0;
         public double mapy = 0;
         public double dist = 0;
 
+        public final String contenttypeId;
+        public final String contentid;
+
+
         public Entry(String title, String addr1, String firstimage, String overview,
-                      double mapx, double mapy, double dist) {
+                      double mapx, double mapy, double dist, String contenttypeId, String contentid) {
             this.title = title;
             this.addr1 = addr1;
             this.firstimage = firstimage;
@@ -139,6 +144,9 @@ public class VisitKoreaXmlParser {
             this.mapx = mapx;
             this.mapy = mapy;
             this.dist = dist;
+
+            this.contenttypeId = contenttypeId;
+            this.contentid = contentid;
         }
     }
 
@@ -153,6 +161,12 @@ public class VisitKoreaXmlParser {
         String addr1 = null;
         String firstImage = null;
         String overview = null;
+
+        String contentTypeId = null;
+        String contentId = null;
+
+        String tell = null;
+
         double mapx = -1;
         double mapy = -1;
         double dist = -1;
@@ -171,24 +185,32 @@ public class VisitKoreaXmlParser {
             } else if (name.equals("firstimage")) {
                 firstImage = readLink(parser);
             } else if (name.equals("overview")) {
-                overview = readLink(parser);
+                overview = readOverview(parser);
             } else if (name.equals("mapx")) {
                 String temp = readText(parser);
                 mapx = Double.parseDouble(temp);
             } else if (name.equals("mapy")) {
                 String temp = readText(parser);
                 mapy = Double.parseDouble(temp);
-            }
-            else if (name.equals("dist")) {
+            } else if (name.equals("dist")) {
                 String temp = readText(parser);
                 dist = Double.parseDouble(temp);
-            }else {
+            } else if (name.equals("contenttypeid")) {
+                contentTypeId = readText(parser);
+            } else if (name.equals("contentid")) {
+                contentId = readText(parser);
+            } else if (name.equals("tel")) {
+                tell = readText(parser);
+            }  else {
                 skip(parser);
             }
         }
 
         Log.i(Tag, "out readItem");
-        return new Entry(title, addr1, firstImage, overview, mapx, mapy, dist);
+        Entry entry = new Entry(title, addr1, firstImage, overview, mapx, mapy, dist, contentTypeId, contentId);
+        entry.phone = tell;
+
+        return entry;
     }
 
     // Processes title tags in the feed.
@@ -205,6 +227,14 @@ public class VisitKoreaXmlParser {
         String addr = readText(parser);
         parser.require(XmlPullParser.END_TAG, ns, "firstimage");
         return addr;
+    }
+
+    // Processes link tags in the feed.
+    private String readOverview(XmlPullParser parser) throws IOException, XmlPullParserException {
+        parser.require(XmlPullParser.START_TAG, ns, "overview");
+        String overview = readText(parser);
+        parser.require(XmlPullParser.END_TAG, ns, "overview");
+        return overview;
     }
 
     // Processes summary tags in the feed.

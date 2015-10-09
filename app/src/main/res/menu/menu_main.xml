@@ -5,15 +5,15 @@
     <item
         android:id="@+id/go_map"
         android:icon="@android:drawable/ic_menu_delete"
-        android:title="지도 가기"/>
+        android:title="@string/gotomap"/>
     <item
         android:id="@+id/go_schedule"
         android:icon="@android:drawable/ic_menu_delete"
-        android:title="내 스케쥴 보기"/>
+        android:title="@string/gotoschedule"/>
     <item
         android:id="@+id/my_account"
         android:icon="@android:drawable/ic_menu_delete"
-        android:title="설정"/>
+        android:title="@string/gotosetting"/>
 <!--    <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="never" />
 -->

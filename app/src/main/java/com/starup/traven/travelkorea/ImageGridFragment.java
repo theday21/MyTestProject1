@@ -36,6 +36,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageButton;
@@ -56,7 +57,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import com.starup.traven.travelkorea.XMLParser.VisitKoreaXmlParser;
 import com.starup.traven.travelkorea.XMLParser.VisitKoreaXmlParser.Entry;
@@ -68,13 +72,15 @@ import com.starup.traven.travelkorea.XMLParser.VisitKoreaXmlParser.Entry;
  * quickly if, for example, the user rotates the device.
  */
 public class ImageGridFragment extends Fragment implements AdapterView.OnItemClickListener {
+    private GridView mGridView = null;
+
     private int mAge;
     private int mGender;
     private int mLanguage;
 
-    private String langService = "KorService";
-    private String contentID = "12";
-    private static final String radius = "2000";
+    private String langService = "EngService";
+    private String contentID = "82";
+    private String radius = "2000";
     private String mapX = "126.981106";
     private String mapY = "37.568477";
 
@@ -84,25 +90,20 @@ public class ImageGridFragment extends Fragment implements AdapterView.OnItemCli
     private static final String URL3 = "&mapX="; // +mapX
     private static final String URL4 = "&mapY="; // +mapY
     private static final String URL5 = "&radius=";//radius
-    private static final String URl6 = "&listYN=Y&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&arrange=A&numOfRows=100&pageNo=1";
+    private static final String URl6 = "&listYN=Y&MobileOS=AND&MobileApp=TourAPI3.0_Guide&arrange=A&numOfRows=100&pageNo=1";
 
-    private static final String temp = "http://api.visitkorea.or.kr/openapi/service/rest/EngService/areaBasedList?ServiceKey=" +
-            service_key +
-            "&contentTypeId=85&areaCode=&sigunguCode=&cat1=&cat2=&cat3=&listYN=Y&MobileOS=ETC&MobileApp=TourAPI2.0_Guide&arrange=A&numOfRows=12&pageNo=1";
 
-    String getURL()
+    public String getURL()
     {
-
         Location loc = ((MainActivity)getActivity()).mLastLocation;
         if(loc != null) {
-            mapX = Double.toString(loc.getLatitude());
             mapX = Double.toString(loc.getLongitude());
+            mapY = Double.toString(loc.getLatitude());
         }
 
         String visitURL =
                 URL1 + langService + URL2 + contentID + URL3 + mapX + URL4 + mapY + URL5 + radius + URl6;
-//        return visitURL;
-        return temp;
+        return visitURL;
     }
     private static final String TAG = "ImageGridFragment";
     private static final String IMAGE_CACHE_DIR = "thumbs";
@@ -142,10 +143,9 @@ public class ImageGridFragment extends Fragment implements AdapterView.OnItemCli
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        mAge = ((MainActivity)getActivity()).myinfo.age;
-        mGender = ((MainActivity)getActivity()).myinfo.gender;
-        mLanguage = ((MainActivity)getActivity()).myinfo.language;
+        radius = getResources().getString(R.string.distance);
 
+        mGridData = new ArrayList<Entry>(0);
         mImageThumbSize = getResources().getDimensionPixelSize(R.dimen.image_thumbnail_size);
         mImageThumbSpacing = getResources().getDimensionPixelSize(R.dimen.image_thumbnail_spacing);
 
@@ -169,7 +169,43 @@ public class ImageGridFragment extends Fragment implements AdapterView.OnItemCli
         sPref = sharedPrefs.getString("listPref", "Wi-Fi");
 
         updateConnectedFlags();
-        loadPage();
+        updateOption();
+    }
+
+    public void updateOption() {
+        mAge = ((MainActivity)getActivity()).myinfo.age;
+        mGender = ((MainActivity)getActivity()).myinfo.gender;
+        mLanguage = ((MainActivity)getActivity()).myinfo.language;
+
+        if(mLanguage == 1) {
+            langService = "KorService";
+        } else if(mLanguage == 2) {
+            langService = "ChsService";
+        } else if(mLanguage == 3) {
+            langService = "JpnService";
+        } else {
+            langService = "EngService";
+        }
+
+        if (langService.equals("KorService")) {
+            if (contentID == "82") {
+                contentID = "39";
+            } else if (contentID == "80") {
+                contentID = "32";
+            } else if (contentID == "79") {
+                contentID = "38";
+            } else if (contentID == "88") {
+                contentID = "14";
+            } else if (contentID == "85") {
+                contentID = "15";
+            }
+        }
+
+        Location loc = ((MainActivity)getActivity()).mLastLocation;
+        if(loc != null) {
+            mapX = Double.toString(loc.getLongitude());
+            mapY = Double.toString(loc.getLatitude());
+        }
     }
 
     @Override
@@ -177,9 +213,10 @@ public class ImageGridFragment extends Fragment implements AdapterView.OnItemCli
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         final View v = inflater.inflate(R.layout.image_grid_fragment, container, false);
-        final GridView mGridView = (GridView) v.findViewById(R.id.gridView);
+        mGridView = (GridView) v.findViewById(R.id.gridView);
         mGridView.setAdapter(mAdapter);
         mGridView.setOnItemClickListener(this);
+
         mGridView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int scrollState) {
@@ -248,30 +285,41 @@ public class ImageGridFragment extends Fragment implements AdapterView.OnItemCli
 
                 @Override
                 public void onClick(View arg0) {
-//                    String str = "empty";
-                    if(arg0.getId() == R.id.foodButton) {
-                        contentID = "39";
-//                        str = "food button";
-                    }
-                    else if(arg0.getId() == R.id.hotelButton) {
-                        contentID = "32";
-//                        str = "hotel button";
-                    }
-                    else if(arg0.getId() == R.id.shoppingButton) {
-                        contentID = "38";
-//                        str = "shopping button";
-                    }
-                    else if(arg0.getId() == R.id.cultureButton) {
-                        contentID = "14";
-//                        str = "culture button";
-                    }
-                    else if(arg0.getId() == R.id.concertButton) {
-                        contentID = "15";
-//                        str = "concert button";
+
+                    mAge = ((MainActivity)getActivity()).myinfo.age;
+                    mGender = ((MainActivity)getActivity()).myinfo.gender;
+                    mLanguage = ((MainActivity)getActivity()).myinfo.language;
+
+                    if(mLanguage == 1) {
+                        langService = "KorService";
+                    } else if(mLanguage == 2) {
+                        langService = "ChsService";
+                    } else if(mLanguage == 3) {
+                        langService = "JpnService";
+                    } else {
+                        langService = "EngService";
                     }
 
-//                    textview.setText(str);
-                    loadPage();
+                    boolean temp = langService.equals("KorService");
+                    String currentID = contentID;
+                    if (arg0.getId() == R.id.foodButton) {
+                        contentID = langService.equals("KorService") ? "39" : "82";
+                    } else if (arg0.getId() == R.id.hotelButton) {
+                        contentID = langService.equals("KorService") ? "32" : "80";
+                    } else if (arg0.getId() == R.id.shoppingButton) {
+                        contentID = langService.equals("KorService") ? "38" : "79";
+                    } else if (arg0.getId() == R.id.cultureButton) {
+                        contentID = langService.equals("KorService") ? "14" : "78";
+                    } else if (arg0.getId() == R.id.concertButton) {
+                        contentID = langService.equals("KorService") ? "15" : "85";
+                    }
+
+//                    if (contentID != currentID)
+                    {
+                        mGridData.clear();
+                        loadPage();
+                    }
+
                 }
 
             });
@@ -281,6 +329,10 @@ public class ImageGridFragment extends Fragment implements AdapterView.OnItemCli
     @Override
     public void onResume() {
         super.onResume();
+
+        loadPage();
+
+        //updateOption();
         mImageFetcher.setExitTasksEarly(false);
         mAdapter.notifyDataSetChanged();
     }
@@ -303,17 +355,9 @@ public class ImageGridFragment extends Fragment implements AdapterView.OnItemCli
     @Override
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
         final Intent i = new Intent(getActivity(), ImageDetailActivity.class);
-        //i.putExtra(ImageDetailActivity.EXTRA_IMAGE, (int) id);
-//        if (Utils.hasJellyBean()) {
-//            // makeThumbnailScaleUpAnimation() looks kind of ugly here as the loading spinner may
-//            // show plus the thumbnail image in GridView is cropped. so using
-//            // makeScaleUpAnimation() instead.
-//            ActivityOptions options =
-//                    ActivityOptions.makeScaleUpAnimation(v, 0, 0, v.getWidth(), v.getHeight());
-//            getActivity().startActivity(i, options.toBundle());
-//        } else {
-//            startActivity(i);
-//        }
+        i.putExtra("langService", langService);
+        i.putExtra("contenttypeId", mGridData.get(position).contenttypeId);
+        i.putExtra("contentid", mGridData.get(position).contentid);
         startActivity(i);
     }
 
@@ -338,13 +382,15 @@ public class ImageGridFragment extends Fragment implements AdapterView.OnItemCli
     // causing a delay that results in a poor user experience, always perform
     // network operations on a separate thread from the UI.
     private void loadPage() {
-        if (((sPref.equals(ANY)) && (wifiConnected || mobileConnected))
-                || ((sPref.equals(WIFI)) && (wifiConnected))) {
-            // AsyncTask subclass
-            new DownloadXmlTask().execute(getURL());
-        } else {
-            showErrorPage();
-        }
+        updateOption();
+        new DownloadXmlTask().execute(getURL());
+
+//        if (((sPref.equals(ANY)) && (wifiConnected || mobileConnected))
+//                || ((sPref.equals(WIFI)) && (wifiConnected))) {
+//            // AsyncTask subclass
+//        } else {
+//            showErrorPage();
+//        }
     }
 
     private void showErrorPage() {
@@ -389,28 +435,21 @@ public class ImageGridFragment extends Fragment implements AdapterView.OnItemCli
         InputStream stream = null;
         VisitKoreaXmlParser stackOverflowXmlParser = new VisitKoreaXmlParser();
 
-/*         String title = null;
-        String url = null;
-        String summary = null;
-        Calendar rightNow = Calendar.getInstance();
-        DateFormat formatter = new SimpleDateFormat("MMM dd h:mmaa");
-
-        // Checks whether the user set the preference to include summary text
-       SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        boolean pref = sharedPrefs.getBoolean("summaryPref", false);
-
-        StringBuilder htmlString = new StringBuilder();
-        htmlString.append("<h3>" + getResources().getString(R.string.page_title) + "</h3>");
-        htmlString.append("<em>" + getResources().getString(R.string.updated) + " " +
-                formatter.format(rightNow.getTime()) + "</em>");
-    */
         try {
             stream = downloadUrl(urlString);
 
-            if(mGridData != null)
-                mGridData.clear();
-
+            mGridData = null;
             mGridData = stackOverflowXmlParser.parse(stream);
+
+            ListIterator<Entry> iter = mGridData.listIterator();
+
+            while(iter.hasNext()) {
+                Entry entry = iter.next();
+                if(entry.firstimage == null) {
+                    iter.remove();
+                }
+            }
+
 
             // Makes sure that the InputStream is closed after the app is
             // finished using it.
@@ -472,8 +511,10 @@ public class ImageGridFragment extends Fragment implements AdapterView.OnItemCli
         public ImageAdapter(Context context) {
             super();
             mContext = context;
+
             mImageViewLayoutParams = new GridView.LayoutParams(
                     LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+
             // Calculate ActionBar height
             TypedValue tv = new TypedValue();
             if (context.getTheme().resolveAttribute(
@@ -485,56 +526,40 @@ public class ImageGridFragment extends Fragment implements AdapterView.OnItemCli
 
         @Override
         public int getCount() {
-            // If columns have yet to be determined, return no items
-            if (getNumColumns() == 0) {
-                return 0;
-            }
+            int val = 0;
+            if(mGridData != null)
+                val = mGridData.size();
 
-            // Size + number of columns for top empty row
-            return Images.imageThumbUrls.length + mNumColumns;
+            return val;
         }
 
         @Override
         public Object getItem(int position) {
-            return position < mNumColumns ?
-                    null : Images.imageThumbUrls[position - mNumColumns];
+            return mGridData.get(position);
         }
 
-        @Override
         public long getItemId(int position) {
-            return position < mNumColumns ? 0 : position - mNumColumns;
+            return position;
         }
 
-        @Override
-        public int getViewTypeCount() {
-            // Two types of views, the normal ImageView and the top row of empty views
-            return 2;
-        }
+//        @Override
+//        public int getViewTypeCount() {
+//            // Two types of views, the normal ImageView and the top row of empty views
+//            return 2;
+//        }
 
-        @Override
-        public int getItemViewType(int position) {
-            return (position < mNumColumns) ? 1 : 0;
-        }
+//        @Override
+//        public int getItemViewType(int position) {
+//            return (position < mNumColumns) ? 1 : 0;
+//        }
 
-        @Override
-        public boolean hasStableIds() {
-            return true;
-        }
+//        @Override
+//        public boolean hasStableIds() {
+//            return true;
+//        }
 
         @Override
         public View getView(int position, View convertView, ViewGroup container) {
-            //BEGIN_INCLUDE(load_gridview_item)
-            // First check if this is the top row
-            if (position < mNumColumns) {
-                if (convertView == null) {
-                    convertView = new View(mContext);
-                }
-                // Set empty view with height of ActionBar
-//                convertView.setLayoutParams(new AbsListView.LayoutParams(
-//                        LayoutParams.MATCH_PARENT, mActionBarHeight));
-                return convertView;
-            }
-
             // Now handle the main ImageView thumbnails
             ImageView imageView;
             if (convertView == null) { // if it's not recycled, instantiate and initialize
@@ -554,7 +579,7 @@ public class ImageGridFragment extends Fragment implements AdapterView.OnItemCli
             // setting a placeholder image while the background thread runs
             //mImageFetcher.loadImage(Images.imageThumbUrls[position - mNumColumns], imageView);
 
-            if(mGridData != null && position < 100) {
+            if(mGridData != null) {
                 String image_url = mGridData.get(position).firstimage;
 
                 if (image_url != null)

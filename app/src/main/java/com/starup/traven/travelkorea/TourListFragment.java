@@ -20,6 +20,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -69,34 +70,50 @@ import com.starup.traven.travelkorea.XMLParser.VisitKoreaXmlParser.Entry;
  * quickly if, for example, the user rotates the device.
  */
 public class TourListFragment extends Fragment implements AdapterView.OnItemClickListener {
-    private String contentID = "12";
-    private static final String radius = "2000";
+
+    private int mAge;
+    private int mGender;
+    private int mLanguage;
+
+    private String contentID = "82";
+    private String langService = "EngService";
+    private String radius = "2000";
     private String mapX = "126.981106";
     private String mapY = "37.568477";
 
     private static final String service_key = "tcMsl%2FuAaldSmyvnY78FqTHtqWLrQUg%2FYLDcNX389OGxcA%2BpXV2ejk86zNsw1XJZXNwUiIw6F8e6BbToTVpblg%3D%3D";
-    private static final String URL =
-            "http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey="+
-                    service_key +
-                    "&contentTypeId=76&mapX=126.981106&mapY=37.568477&radius=2000&listYN=Y&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&arrange=A&numOfRows=100&pageNo=1";
-//            "http://api.visitkorea.or.kr/openapi/service/rest/EngService/areaBasedList?ServiceKey="+service_key+
-//                    "&contentTypeId=76&areaCode=1&sigunguCode=&cat1=&cat2=&cat3=&listYN=Y&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&arrange=A&numOfRows=100&pageNo=1";
+    private static final String URL1 = "http://api.visitkorea.or.kr/openapi/service/rest/";  // +langService
+    private static final String URL2 = "/locationBasedList?ServiceKey="+ service_key + "&contentTypeId="; // +contentID
+    private static final String URL3 = "&mapX="; // +mapX
+    private static final String URL4 = "&mapY="; // +mapY
+    private static final String URL5 = "&radius=";//radius
+    private static final String URl6 = "&listYN=Y&MobileOS=AND&MobileApp=TourAPI3.0_Guide&arrange=A&numOfRows=100&pageNo=1";
 
     String getURL()
     {
-        String visitURL =
-                /*"http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey="+
-                        service_key +
-                        "&contentTypeId=12&mapX=126.981106&mapY=37.568477&radius=2000&listYN=Y&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&arrange=A&numOfRows=100&pageNo=1";
-        */
-                "http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey="+
-                        service_key +
-                        "&contentTypeId=" + contentID +
-                        "&mapX=" + mapX + "&mapY=" + mapY +
-                        "&radius=" + radius +
-                        "&listYN=Y&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&arrange=A&numOfRows=100&pageNo=1";
+        Location loc = ((MainActivity)getActivity()).mLastLocation;
+        if(loc != null) {
+            mapX = Double.toString(loc.getLongitude());
+            mapY = Double.toString(loc.getLatitude());
+        }
 
+        String visitURL =
+                URL1 + langService + URL2 + contentID + URL3 + mapX + URL4 + mapY + URL5 + radius + URl6;
         return visitURL;
+
+//        String visitURL =
+//                /*"http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey="+
+//                        service_key +
+//                        "&contentTypeId=12&mapX=126.981106&mapY=37.568477&radius=2000&listYN=Y&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&arrange=A&numOfRows=100&pageNo=1";
+//        */
+//                "http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey="+
+//                        service_key +
+//                        "&contentTypeId=" + contentID +
+//                        "&mapX=" + mapX + "&mapY=" + mapY +
+//                        "&radius=" + radius +
+//                        "&listYN=Y&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&arrange=A&numOfRows=100&pageNo=1";
+//
+//        return visitURL;
     }
     private static final String TAG = "ImageGridFragment";
     private static final String IMAGE_CACHE_DIR = "thumbs";
@@ -105,6 +122,7 @@ public class TourListFragment extends Fragment implements AdapterView.OnItemClic
     private int mImageThumbSpacing;
     private ListAdapter mAdapter;
     private ImageFetcher mImageFetcher;
+
 
     /**
      *  VisitKorea Open API connection.
@@ -143,6 +161,22 @@ public class TourListFragment extends Fragment implements AdapterView.OnItemClic
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        radius = getResources().getString(R.string.distance);
+
+        mAge = ((MainActivity)getActivity()).myinfo.age;
+        mGender = ((MainActivity)getActivity()).myinfo.gender;
+        mLanguage = ((MainActivity)getActivity()).myinfo.language;
+
+        if(mLanguage == 1) {
+            langService = "KorService";
+        } else if(mLanguage == 2) {
+            langService = "ChsService";
+        } else if(mLanguage == 3) {
+            langService = "JpnService";
+        } else {
+            langService = "EngService";
+        }
 
         mImageThumbSize = getResources().getDimensionPixelSize(R.dimen.image_thumbnail_size);
         mImageThumbSpacing = getResources().getDimensionPixelSize(R.dimen.image_thumbnail_spacing);
@@ -202,24 +236,38 @@ public class TourListFragment extends Fragment implements AdapterView.OnItemClic
 
                 @Override
                 public void onClick(View arg0) {
-                    String str = "empty";
-                    if(arg0.getId() == R.id.foodButton) {
-                        contentID = "39";
-                    }
-                    else if(arg0.getId() == R.id.hotelButton) {
-                        contentID = "32";
-                    }
-                    else if(arg0.getId() == R.id.shoppingButton) {
-                        contentID = "38";
-                    }
-                    else if(arg0.getId() == R.id.cultureButton) {
-                        contentID = "14";
-                    }
-                    else if(arg0.getId() == R.id.concertButton) {
-                        contentID = "15";
+
+                    mAge = ((MainActivity)getActivity()).myinfo.age;
+                    mGender = ((MainActivity)getActivity()).myinfo.gender;
+                    mLanguage = ((MainActivity)getActivity()).myinfo.language;
+
+                    if(mLanguage == 1) {
+                        langService = "KorService";
+                    } else if(mLanguage == 2) {
+                        langService = "ChsService";
+                    } else if(mLanguage == 3) {
+                        langService = "JpnService";
+                    } else {
+                        langService = "EngService";
                     }
 
-                    loadPage();
+                    String currentID = contentID;
+                    if (arg0.getId() == R.id.foodButton) {
+                        contentID = langService.equals("KorService") ? "39" : "82";
+                    } else if (arg0.getId() == R.id.hotelButton) {
+                        contentID = langService.equals("KorService") ? "32" : "80";
+                    } else if (arg0.getId() == R.id.shoppingButton) {
+                        contentID = langService.equals("KorService") ? "38" : "79";
+                    } else if (arg0.getId() == R.id.cultureButton) {
+                        contentID = langService.equals("KorService") ? "14" : "78";
+                    } else if (arg0.getId() == R.id.concertButton) {
+                        contentID = langService.equals("KorService") ? "15" : "85";
+                    }
+
+                    if (contentID != currentID) {
+                        mGridData.clear();
+                        loadPage();
+                    }
                 }
 
             });
@@ -262,6 +310,11 @@ public class TourListFragment extends Fragment implements AdapterView.OnItemClic
 //        } else {
 //            startActivity(i);
 //        }
+
+        i.putExtra("langService", langService);
+        i.putExtra("contenttypeId", mGridData.get(position).contenttypeId);
+        i.putExtra("contentid", mGridData.get(position).contentid);
+
         startActivity(i);
     }
 
@@ -286,12 +339,51 @@ public class TourListFragment extends Fragment implements AdapterView.OnItemClic
     // causing a delay that results in a poor user experience, always perform
     // network operations on a separate thread from the UI.
     private void loadPage() {
-        if (((sPref.equals(ANY)) && (wifiConnected || mobileConnected))
-                || ((sPref.equals(WIFI)) && (wifiConnected))) {
-            // AsyncTask subclass
-            new DownloadXmlTask().execute(getURL());
+        updateOption();
+        new DownloadXmlTask().execute(getURL());
+
+//        if (((sPref.equals(ANY)) && (wifiConnected || mobileConnected))
+//                || ((sPref.equals(WIFI)) && (wifiConnected))) {
+//            // AsyncTask subclass
+//
+//        } else {
+//            showErrorPage();
+//        }
+    }
+
+    public void updateOption() {
+        mAge = ((MainActivity)getActivity()).myinfo.age;
+        mGender = ((MainActivity)getActivity()).myinfo.gender;
+        mLanguage = ((MainActivity)getActivity()).myinfo.language;
+
+        if(mLanguage == 1) {
+            langService = "KorService";
+        } else if(mLanguage == 2) {
+            langService = "ChsService";
+        } else if(mLanguage == 3) {
+            langService = "JpnService";
         } else {
-            showErrorPage();
+            langService = "EngService";
+        }
+
+        if (langService.equals("KorService")) {
+            if (contentID == "82") {
+                contentID = "39";
+            } else if (contentID == "80") {
+                contentID = "32";
+            } else if (contentID == "79") {
+                contentID = "38";
+            } else if (contentID == "88") {
+                contentID = "14";
+            } else if (contentID == "85") {
+                contentID = "15";
+            }
+        }
+
+        Location loc = ((MainActivity)getActivity()).mLastLocation;
+        if(loc != null) {
+            mapX = Double.toString(loc.getLongitude());
+            mapY = Double.toString(loc.getLatitude());
         }
     }
 
@@ -326,8 +418,8 @@ public class TourListFragment extends Fragment implements AdapterView.OnItemClic
 
             if(result.equals("OK")) {
                 //mGridAdapter.setGridData(mGridData);
-                mAdapter.notifyDataSetChanged();
                 mParent.changeGridDataSet(mGridData);
+                mAdapter.notifyDataSetChanged();
             }
         }
     }
@@ -431,8 +523,8 @@ public class TourListFragment extends Fragment implements AdapterView.OnItemClic
                     mImageFetcher.loadImage(image_url, contactViewHolder.imageView);
             }
             contactViewHolder.titleView.setText(entry.title);
-            contactViewHolder.addrView.setText(entry.addr1);
-            contactViewHolder.distView.setText("거리: " + Double.toString(entry.dist));
+//            contactViewHolder.addrView.setText(entry.addr1);
+            contactViewHolder.distView.setText(Double.toString(entry.dist/1000.)+" km");
 //            Random rand = new Random();
 //            int randomNum = rand.nextInt((5 - 1) + 1) + 1;
 //
@@ -459,7 +551,7 @@ public class TourListFragment extends Fragment implements AdapterView.OnItemClic
             return new ContactViewHolder(itemView);
         }
 
-        public class ContactViewHolder extends RecyclerView.ViewHolder {
+        public class ContactViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener {
             LinearLayout itemView = null;
             ImageView imageView = null;
             TextView titleView = null;
@@ -471,9 +563,36 @@ public class TourListFragment extends Fragment implements AdapterView.OnItemClic
                 super(v);
                 imageView = (ImageView)v.findViewById(R.id.list_image);
                 titleView = (TextView)v.findViewById(R.id.list_title);
-                addrView = (TextView)v.findViewById(R.id.list_addrView);
+//                addrView = (TextView)v.findViewById(R.id.list_addrView);
                 distView = (TextView)v.findViewById(R.id.list_dist);
                 //starImageView = (ImageView)v.findViewById(R.id.list_star);
+
+                v.setOnClickListener(this);
+            }
+
+            @Override
+            public void onClick(View v) {
+
+                TextView tv  = (TextView)v.findViewById(R.id.list_title);
+
+                String title = tv.getText().toString();
+
+                int location = -1;
+                for (int i = 0; i < mGridData.size(); ++i) {
+                    if (mGridData.get(i).title.equals((title))) {
+                        location = i;
+                        break;
+                    }
+                }
+                final Intent i = new Intent(getActivity(), ImageDetailActivity.class);
+
+                i.putExtra("langService", langService);
+
+                if(location != -1) {
+                    i.putExtra("contenttypeId", mGridData.get(location).contenttypeId);
+                    i.putExtra("contentid", mGridData.get(location).contentid);
+                }
+                startActivity(i);
             }
         }
 

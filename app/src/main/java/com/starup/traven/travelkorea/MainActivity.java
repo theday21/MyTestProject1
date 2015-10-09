@@ -1,5 +1,6 @@
 package com.starup.traven.travelkorea;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.graphics.Bitmap;
@@ -7,6 +8,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.os.AsyncTask;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 //import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -22,6 +25,12 @@ import android.support.v4.app.FragmentManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+
+import org.json.JSONException;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -49,6 +58,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private ViewPager mPager;
     private PagerAdapter mPagerAdapter;
 
+    private Menu mMenu = null;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +68,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         myinfo = new MyInfo();
         fragments = new Fragment[4];
+
+        readObject();
 
         ActionBar bar = getSupportActionBar();
         bar.setDisplayShowTitleEnabled(false);
@@ -86,9 +100,61 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        mMenu = menu;
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        changeMenu();
         return true;
+    }
+
+    public void readObject() {
+        try
+        {
+            String filePath = Environment.getExternalStorageDirectory().toString() + "/TravelKorea/info.ini";
+            File file = new File(filePath);
+
+            if(file.exists()) {
+                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath));
+
+                if (ois != null) {
+                    myinfo.language = ois.readInt();
+                    myinfo.age = ois.readInt();
+                    myinfo.gender = ois.readInt();
+
+                    ois.close();
+                }
+            }
+        }catch (Exception e) {
+
+        }
+    }
+
+    public void changeMenu() {
+        if(mMenu != null) {
+            MenuItem mapitem = mMenu.findItem(R.id.go_map);
+            MenuItem scheduleitem = mMenu.findItem(R.id.go_schedule);
+            MenuItem optionitem = mMenu.findItem(R.id.my_account);
+
+            int lang = myinfo.language;
+            if (lang == 1) {
+                mapitem.setTitle("지도가기");
+                scheduleitem.setTitle("내 스케쥴");
+                optionitem.setTitle("설정");
+            } else if (lang == 2) {
+                mapitem.setTitle("地图");
+                scheduleitem.setTitle("日程");
+                optionitem.setTitle("设定");
+            } else if (lang == 3) {
+                mapitem.setTitle("ちず");
+                scheduleitem.setTitle("スケジュール");
+                optionitem.setTitle("せってい");
+            } else {
+                mapitem.setTitle("Map");
+                scheduleitem.setTitle("Scehdule");
+                optionitem.setTitle("Setting");
+            }
+        }
     }
 
     @Override
@@ -103,8 +169,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         } else if(id == R.id.go_schedule) {
             mPager.setCurrentItem(3);
         } else if(id == R.id.my_account) {
-            final Intent i = new Intent(this, MyAccount.class);
-            startActivityForResult(i, 2);
+            final Intent intent = new Intent(this, MyAccount.class);
+
+            intent.putExtra("lang", myinfo.language);
+            intent.putExtra("age", myinfo.age);
+            intent.putExtra("gender", myinfo.gender);
+
+            startActivityForResult(intent, 2);
         }
 //        //noinspection SimplifiableIfStatement
 //        if (id == R.id.action_settings) {
@@ -112,6 +183,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 //        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        changeMenu();
     }
 
     @Override

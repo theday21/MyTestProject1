@@ -1,5 +1,6 @@
 package com.starup.traven.travelkorea;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -12,6 +13,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.starup.traven.travelkorea.XMLParser.VisitKoreaXmlParser;
@@ -31,7 +33,7 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback,
     private Fragment child = null;
     SupportMapFragment mMapFragment = null;
     private GoogleMap mMap;
-    static final LatLng SEOUL = new LatLng( 37.56, 126.97);
+    static LatLng currentLoc = new LatLng( 37.56, 126.97);
     private List<VisitKoreaXmlParser.Entry> mGridData = null;
 
 
@@ -71,13 +73,26 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback,
         } catch (Exception e) {
             ;
         }
-        if(mGridData != null && mGridData.size() >0) {
-            LatLng locate = new LatLng(mGridData.get(2).mapx, mGridData.get(2).mapy);
-        }
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SEOUL, 13));
+
+        mMap.addMarker(new MarkerOptions()
+                    .position(currentLoc)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                    .title("현재위치"));
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 13));
     }
     public void notifyDataSetChanged() {
+        Location loc = ((MainActivity)getActivity()).mLastLocation;
 
+        if(loc != null){
+            currentLoc = new LatLng(loc.getLatitude(), loc.getLongitude());
+            mMap.addMarker(new MarkerOptions()
+                    .position(currentLoc)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                    .title("현재위치"));
+        }
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 13));
     }
 
     @Override
@@ -93,6 +108,12 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback,
         mAge = ((MainActivity)getActivity()).myinfo.age;
         mGender = ((MainActivity)getActivity()).myinfo.gender;
         mLanguage = ((MainActivity)getActivity()).myinfo.language;
+
+        Location loc = ((MainActivity)getActivity()).mLastLocation;
+
+        if(loc != null){
+            currentLoc = new LatLng(loc.getLatitude(), loc.getLongitude());
+        }
     }
 
     @Override
@@ -135,15 +156,14 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback,
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
         // Map is ready to be used.
         mMap = googleMap;
 
         // Set the long click listener as a way to exit the map.
         mMap.setOnMapLongClickListener(this);
-
         // Add a marker with a title that is shown in its info window.
-        mMap.addMarker(new MarkerOptions().position(SEOUL)
-                .title("Sydney Opera House"));
+
 
         if(mGridData != null) {
             for (int i = 0; i < mGridData.size(); i++) {
@@ -156,8 +176,18 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback,
             }
         }
 
+        Location loc = ((MainActivity)getActivity()).mLastLocation;
+
+        if(loc != null) {
+            currentLoc = new LatLng(loc.getLatitude(), loc.getLongitude());
+            mMap.addMarker(new MarkerOptions()
+                    .position(currentLoc)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                    .title("현재위치"));
+        }
+
         // Move the camera to show the marker.
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SEOUL, 3));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 3));
     }
 
     @Override
